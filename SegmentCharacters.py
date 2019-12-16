@@ -12,6 +12,7 @@ from random import randint
 license_plate = np.invert(DetectPlateV2.binary)
 
 labelled_plate = measure.label(license_plate)
+print("Number of components: %d" %np.max(labelled_plate))
 
 fig, ax1 = plt.subplots(1)
 ax1.imshow(license_plate, cmap="gray")
@@ -19,7 +20,7 @@ ax1.imshow(license_plate, cmap="gray")
 # a license plate should be between 5% and 15% of the license plate,
 # and height should be between 35% and 60%
 # this will eliminate some
-character_dimensions = (0.35*license_plate.shape[0], 0.90*license_plate.shape[0], 0.02*license_plate.shape[1], 0.3*license_plate.shape[1])
+character_dimensions = (0.25*license_plate.shape[0], 0.90*license_plate.shape[0], 0.05*license_plate.shape[1], 0.3*license_plate.shape[1])
 min_height, max_height, min_width, max_width = character_dimensions
 
 print("max_height: %f - height: %f" %(max_height, license_plate.shape[0]))
@@ -50,6 +51,6 @@ for regions in regionprops(labelled_plate):
         characters.append(resized_char)
 
         # this is just to keep track of the arrangement of the characters
-        column_list.append(x0)
+        column_list.append(x0 + y0*2)
 # print(characters)
-# plt.show()
+plt.show()
