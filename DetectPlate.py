@@ -25,7 +25,7 @@ cv2.destroyAllWindows()
 import imutils
 car_image = imread("./output/frame%d.jpg"%(count-1), as_gray=True)
 car_image = imutils.rotate(car_image, 270)
-# car_image = imread("car.png", as_gray=True)
+# car_image = imread("7.jpg", as_gray=True)
 # it should be a 2 dimensional array
 print(car_image.shape)
 
