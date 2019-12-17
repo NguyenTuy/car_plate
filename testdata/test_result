@@ -1,0 +1,5 @@
+- 4.jpg, 6.jpg, 28.jpg failed because wpod detect khong het ban so
+- 5.jpg, 9.jpg biển số xanh
+- 12.jpg, 15.jpg, 16.jpg, 19.jpg, 20.jpg, 23.jpg, 27.jpg cần cải thiện xử lý  đầu vào thresold
+- 18.jpg, 21.jpg, 25.jpg, 26.jpg, 28.jpg, 29.jpg, 30.jpg train thêm data cho detect số
+- 24.jpg thu tu cua number sau khi detect khong dung

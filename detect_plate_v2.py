@@ -1,5 +1,6 @@
 import cv2
 from lib_detection import detect_lp, im2single
+import config
 
 # Dinh nghia cac ky tu tren bien so
 char_list = '0123456789ABCDEFIGHKLMNPRSTUVXYZ'
@@ -7,19 +8,16 @@ char_list = '0123456789ABCDEFIGHKLMNPRSTUVXYZ'
 
 # Ham fine tune bien so, loai bo cac ki tu khong hop ly
 def fine_tune(lp):
-    newString = ""
+    new_string = ""
     for i in range(len(lp)):
         if lp[i] in char_list:
-            newString += lp[i]
-    return newString
+            new_string += lp[i]
+    return new_string
 
-
-# Đường dẫn ảnh, các bạn đổi tên file tại đây để thử nhé
-img_path = "testdata/1.jpg"
 def get_plate_area(path, wpod_net):
 
     # Đọc file ảnh đầu vào
-    Ivehicle = cv2.imread(img_path)
+    Ivehicle = cv2.imread(path)
 
     # Kích thước lớn nhất và nhỏ nhất của 1 chiều ảnh
     Dmax = 608
@@ -29,13 +27,16 @@ def get_plate_area(path, wpod_net):
     ratio = float(max(Ivehicle.shape[:2])) / min(Ivehicle.shape[:2])
     side = int(ratio * Dmin)
     bound_dim = min(side, Dmax)
+    if config.DEBUG:
+        cv2.imshow("Origin", Ivehicle)
 
     _, LpImg, lp_type = detect_lp(wpod_net, im2single(Ivehicle), bound_dim, lp_threshold=0.5)
 
     if (len(LpImg)):
         # Chuyen doi anh bien so
         LpImg[0] = cv2.convertScaleAbs(LpImg[0], alpha=(255.0))
-        # cv2.imshow("normal", LpImg[0])
+        if config.DEBUG:
+            cv2.imshow("Detect plate", LpImg[0])
 
         # Chuyen anh bien so ve gray
         gray = cv2.cvtColor(LpImg[0], cv2.COLOR_BGR2GRAY)

@@ -4,25 +4,32 @@ from skimage import measure
 from skimage.measure import regionprops
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
+import cv2
+import config
+import warnings
+warnings.filterwarnings("ignore")
 
 def get_number_area(binary):
 
     # The invert was done so as to convert the black pixel to white pixel and vice versa
     license_plate = np.invert(binary)
+    if config.DEBUG:
+        cv2.imshow("normal", binary)
 
     labelled_plate = measure.label(license_plate)
-    print("Number of components: %d" %np.max(labelled_plate))
+    # print("Number of components: %d" %np.max(labelled_plate))
 
-    fig, ax1 = plt.subplots(1)
-    ax1.imshow(license_plate, cmap="gray")
+    if config.DEBUG:
+        fig, ax1 = plt.subplots(1)
+        ax1.imshow(license_plate, cmap="gray")
     # the next two lines is based on the assumptions that the width of
     # a license plate should be between 5% and 15% of the license plate,
     # and height should be between 35% and 60%
     # this will eliminate some
-    character_dimensions = (0.25*license_plate.shape[0], 0.90*license_plate.shape[0], 0.05*license_plate.shape[1], 0.3*license_plate.shape[1])
+    character_dimensions = (0.25*license_plate.shape[0], 0.90*license_plate.shape[0], 0.03*license_plate.shape[1], 0.3*license_plate.shape[1])
     min_height, max_height, min_width, max_width = character_dimensions
 
-    print("max_height: %f - height: %f" %(max_height, license_plate.shape[0]))
+    # print("max_height: %f - height: %f" %(max_height, license_plate.shape[0]))
 
     characters = []
     column_list = []
@@ -41,7 +48,8 @@ def get_number_area(binary):
                                            linewidth=2, fill=False)
 
             # cv2.imshow('window-name %d' % x1, roi)
-            ax1.add_patch(rect_border)
+            if config.DEBUG:
+                ax1.add_patch(rect_border)
 
             # resize the characters to 20X20 and then append each character into the characters list
             resized_char = resize(roi, (20, 20))
@@ -51,5 +59,6 @@ def get_number_area(binary):
             # this is just to keep track of the arrangement of the characters
             column_list.append(x0 + y0*2)
     # print(characters)
-    plt.show()
+    if config.DEBUG:
+        plt.show()
     return column_list, characters
